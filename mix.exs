@@ -47,10 +47,13 @@ defmodule Digits.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:tailwind, "~> 0.1", runtime: Mix.env() == :dev},
-      {:axon, "~> 0.2.0-dev", github: "elixir-nx/axon"},
+      {:axon, "~> 0.2.0"},
       {:exla, "~> 0.2"},
-      {:nx, "~> 0.3.0-dev", github: "elixir-nx/nx", sparse: "nx", override: true},
-      {:scidata, "~> 0.1.9"}
+      {:nx, "~> 0.3.0"},
+      {:scidata, "~> 0.1.9"},
+      {:kino, "~> 0.7.0"},
+      {:evision,"~> 0.1.13"}
+
     ]
   end
 

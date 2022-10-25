@@ -22,7 +22,7 @@ defmodule Digits.Model do
   end
 
   def new({channels, height, width}) do
-    Axon.input({nil, channels, height, width})
+    Axon.input("input",shape: {nil, channels, height, width})
     |> Axon.flatten()
     |> Axon.dense(128, activation: :relu)
     |> Axon.dense(10, activation: :softmax)
@@ -56,6 +56,24 @@ defmodule Digits.Model do
     |> Axon.Loop.evaluator()
     |> Axon.Loop.metric(:accuracy, "Accuracy")
     |> Axon.Loop.run(test_data)
+  end
+
+  def predict(path) do
+    {:ok, mat} = Evision.imread(path, flags: Evision.cv_IMREAD_GRAYSCALE)
+    {:ok, mat} = Evision.resize(mat, [28, 28])
+
+    data =
+      Evision.Nx.to_nx(mat)
+      |> Nx.reshape({1, 28, 28})
+      |> List.wrap()
+      |> Nx.stack()
+
+    {model, state} = load!()
+
+    model
+    |> Axon.predict(state, data, compiler: EXLA)
+    |> Nx.argmax()
+    |> Nx.to_number()
   end
 
 end
